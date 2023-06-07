@@ -5,14 +5,14 @@ import NavBar from "../Components/Shared/NavBar";
 const Main = () => {
   const location = useLocation();
 
-  const noHeaderFooter =
+  const withoutHeaderFooter =
     location.pathname.includes("login") || location.pathname.includes("signup");
 
   return (
     <div>
-      {noHeaderFooter || <NavBar></NavBar>}
+      {withoutHeaderFooter || <NavBar></NavBar>}
       <Outlet></Outlet>
-      {noHeaderFooter || <Footer></Footer>}
+      {withoutHeaderFooter || <Footer></Footer>}
     </div>
   );
 };
