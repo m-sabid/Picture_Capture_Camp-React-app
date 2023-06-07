@@ -18,12 +18,19 @@ const AuthProvider = ({ children }) => {
         return createUserWithEmailAndPassword(auth, email, password)
     }
 
+    const updateUserProfile = (name, photo) => {
+        return updateProfile(auth.currentUser, {
+            displayName: name, photoURL: photo
+        });
+    }
+
+    
     const signIn = (email, password) => {
         setLoading(true);
         return signInWithEmailAndPassword(auth, email, password);
     }
 
-    const googleSignIn = () =>{
+    const signInWithGoogle = () =>{
         setLoading(true);
         return signInWithPopup(auth, googleProvider);
     }
@@ -33,43 +40,36 @@ const AuthProvider = ({ children }) => {
         return signOut(auth);
     }
 
-    const updateUserProfile = (name, photo) => {
-        return updateProfile(auth.currentUser, {
-            displayName: name, photoURL: photo
-        });
-    }
 
-    useEffect(() => {
-        const unsubscribe = onAuthStateChanged(auth, currentUser => {
-            setUser(currentUser);
-            console.log('current user', currentUser);
+    // useEffect(() => {
+    //     const unsubscribe = onAuthStateChanged(auth, currentUser => {
+    //         setUser(currentUser);
 
-            // get and set token
-            if(currentUser){
-                axios.post('https://bistro-boss-server-fawn.vercel.app/jwt', {email: currentUser.email})
-                .then(data =>{
-                    // console.log(data.data.token)
-                    localStorage.setItem('access-token', data.data.token)
-                    setLoading(false);
-                })
-            }
-            else{
-                localStorage.removeItem('access-token')
-            }
+    //         // get and set token
+    //         if(currentUser){
+    //             axios.post('https://bistro-boss-server-fawn.vercel.app/jwt', {email: currentUser.email})
+    //             .then(data =>{
+    //                 localStorage.setItem('access-token', data.data.token)
+    //                 setLoading(false);
+    //             })
+    //         }
+    //         else{
+    //             localStorage.removeItem('access-token')
+    //         }
 
             
-        });
-        return () => {
-            return unsubscribe();
-        }
-    }, [])
+    //     });
+    //     return () => {
+    //         return unsubscribe();
+    //     }
+    // }, [])
 
     const authInfo = {
         user,
         loading,
         createUser,
         signIn,
-        googleSignIn,
+        signInWithGoogle,
         logOut,
         updateUserProfile
     }
