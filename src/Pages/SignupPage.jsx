@@ -12,7 +12,7 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { createUser, loginWithGoogle } = useContext(AuthContext);
+  const { createUser, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
@@ -102,7 +102,7 @@ const SignupPage = () => {
   // Google Signup
   const handleGoogleSignup = async () => {
     try {
-      const result = await loginWithGoogle();
+      const result = await googleSignIn();
 
       // Access the user's name and email from the Google sign-in result
       const { displayName, email } = result.user;

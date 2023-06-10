@@ -1,7 +1,7 @@
 import React from "react";
-import { useQuery } from "react-query";
 import axios from "axios";
 import BASE_URL from "../../Shared/baseurl";
+import { useQuery } from "@tanstack/react-query";
 
 const PopularInstructors = () => {
   const {

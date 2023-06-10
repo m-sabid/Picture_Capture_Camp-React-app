@@ -1,8 +1,8 @@
 import React from "react";
-import { useQuery } from "react-query";
 import axios from "axios";
 import { FiUsers } from "react-icons/fi";
 import BASE_URL from "../../Shared/baseurl";
+import { useQuery } from "@tanstack/react-query";
 
 const PopularClassesPage = () => {
   const {

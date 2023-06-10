@@ -1,18 +1,19 @@
+import { useQuery } from "@tanstack/react-query";
 import React, { useState, useEffect, createContext, useContext } from "react";
 import { FaUserShield, FaChalkboardTeacher } from "react-icons/fa";
 import BASE_URL from "../../../Components/Shared/baseurl";
-import { useQuery } from "react-query";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const AllUsers = () => {
   const [axiosSecure] = useAxiosSecure();
 
   const { data: users = [], refetch } = useQuery(["users"], async () => {
-    const res = await axiosSecure.get(`/api/users`);
+    const res = await axiosSecure.get(`/users`);
     return res.data;
   });
 
-  const updateRole = (userId, role) => {
+  const updateRole = (userId, role, userName) => {
     fetch(`${BASE_URL}/user/role/${userId}`, {
       method: "PATCH",
       body: JSON.stringify({ role }),
@@ -22,25 +23,28 @@ const AllUsers = () => {
     })
       .then((res) => res.json())
       .then((data) => {
-        if (data.modifiedCount) {
+        if (data.success) {
           refetch();
+          Swal.fire({
+            icon: "success",
+            title: `${role}`,
+            text: `${userName} is now an ${role}.`,
+          });
         }
       });
+  };
+
+  const makeAdmin = (userId, userName) => {
+    updateRole(userId, "admin", userName);
+  };
+
+  const makeInstructor = (userId, userName) => {
+    updateRole(userId, "instructor" , userName);
   };
 
   useEffect(() => {
     refetch();
   }, [refetch]);
-
-  const makeAdmin = (userId) => {
-    updateRole(userId, "admin");
-    refetch();
-  };
-
-  const makeInstructor = (userId) => {
-    updateRole(userId, "instructor");
-    refetch();
-  };
 
   return (
     <div>
@@ -69,17 +73,17 @@ const AllUsers = () => {
                     "admin"
                   ) : (
                     <button
-                      onClick={() => makeAdmin(user._id)}
+                      onClick={() => makeAdmin(user._id, user?.name)}
                       title="Make Admin"
                       className="text-green-600 bg-gray-200 text-2xl p-2 rounded-full cursor-pointer"
                     >
                       <FaUserShield />
                     </button>
                   )}
-                  {user.role === "user" && (
+                  {user && (
                     <div className="flex gap-4 justify-center items-center">
                       <button
-                        onClick={() => makeInstructor(user._id)}
+                        onClick={() => makeInstructor(user._id, user?.name)}
                         title="Make Instructor"
                         className="text-green-600 bg-gray-200 text-2xl p-2 rounded-full cursor-pointer"
                       >

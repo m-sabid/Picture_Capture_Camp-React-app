@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 const TopNav = () => {
   const { user, logout } = useContext(AuthContext);
 
-  console.log(user)
+  console.log(user, "user")
   const navigate = useNavigate();
 
   const handleLogout = () => {

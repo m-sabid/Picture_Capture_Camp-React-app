@@ -31,6 +31,8 @@ const Dashboard = () => {
       <div className="drawer-side bg-quaternary">
         <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
         <ul className="menu p-4 w-80">
+
+
           {isAdmin && (
             <>
               <li>
@@ -49,13 +51,15 @@ const Dashboard = () => {
                 </NavLink>
               </li>
               <li>
-                <NavLink to="/">
+                <NavLink to="/dashboard/manage-classes">
                   <FaHotTub></FaHotTub> Manage Classes
                 </NavLink>
               </li>
               <div className="divider"></div>
             </>
           )}
+
+          
           {isInstructor && (
             <>
               <li>

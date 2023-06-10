@@ -1,5 +1,4 @@
 import { useForm } from "react-hook-form";
-import { useQuery } from "react-query";
 import Swal from "sweetalert2";
 import DashboardHeader from "../../../Components/Shared/DashboardHeader";
 import useInstructor from "../../../hooks/useInstructor";
@@ -20,7 +19,7 @@ const AddClasses = () => {
       };
 
       // Make a POST request to the endpoint
-      const response = await axiosSecure.post("/api/classes", requestData);
+      const response = await axiosSecure.post("/api/manage-classes", requestData);
       if (response.data.success) {
         // Instructor data was successfully added
         Swal.fire("Success", "Added A Class Successfully", "success");

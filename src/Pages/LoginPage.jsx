@@ -7,7 +7,7 @@ import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login, loginWithGoogle } = useContext(AuthContext);
+  const { login, googleSignIn } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -28,7 +28,7 @@ const LoginPage = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await loginWithGoogle();
+      await googleSignIn();
       // Redirect user after successful login
       navigate("/");
     } catch (error) {

@@ -1,45 +1,37 @@
-import { useEffect, useContext } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
-import BASE_URL from "../Components/Shared/baseurl";
-import { AuthContext } from "../providers/AuthProvider";
-import useAuth from "./useAuth";
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import useAuth from './useAuth';
+import BASE_URL from '../Components/Shared/baseurl';
+
+const axiosSecure = axios.create({
+  baseURL: `${BASE_URL}`, 
+});
 
 const useAxiosSecure = () => {
-  const navigate = useNavigate();
-  const { logout } = useAuth();
-
-  const axiosSecure = axios.create({
-    baseURL: `${BASE_URL}`,
-  });
+  const { logOut } = useAuth(); 
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     axiosSecure.interceptors.request.use((config) => {
-      const token = localStorage.getItem("access-token"); // Retrieve token from local storage
-      config.headers["Authorization"] = `Bearer ${token}`; // Inject authorization header
+      const token = localStorage.getItem('access-token');
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
       return config;
     });
 
     axiosSecure.interceptors.response.use(
       (response) => response,
-      (error) => {
-        if (
-          error.response &&
-          (error.response.status === 401 || error.response.status === 403)
-        ) {
-          logout()
-            .then(() => {
-              navigate("/login");
-            })
-            .catch((logoutError) => {
-              console.log("Error during logout:", logoutError);
-              navigate("/login");
-            });
+      async (error) => {
+        if (error.response && (error.response.status === 401 || error.response.status === 403)) {
+          await logOut();
+          navigate('/login');
         }
         return Promise.reject(error);
       }
     );
-  }, [axiosSecure, logout, navigate]);
+  }, [logOut, navigate]);
 
   return [axiosSecure];
 };
