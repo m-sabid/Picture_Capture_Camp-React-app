@@ -1,20 +1,27 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { Navigate, useLocation } from "react-router-dom";
 import { AuthContext } from "../providers/AuthProvider";
-import { Navigate, useLocation } from "react-router";
 
+const PrivetRoute = ({ children }) => {
+  const { user, loading, setLoginRedirectPath } = useContext(AuthContext);
 
-const PrivateRoute = ({ children }) => {
-    const { user, loading } = useContext(AuthContext);
-    const location = useLocation();
+  const location = useLocation();
 
-    if(loading){
-        return <progress className="progress w-60"></progress>
+  useEffect(() => {
+    if (!user && location.pathname !== "/login") {
+      setLoginRedirectPath(location.pathname);
     }
+  }, [user, location.pathname, setLoginRedirectPath]);
 
-    if (user) {
-        return children;
-    }
-    return <Navigate to="/login" state={{from: location}} replace></Navigate>
+  if (loading) {
+    return <progress className="progress w-56"></progress>;
+  }
+
+  if (user) {
+    return children;
+  }
+
+  return <Navigate state={{ from: location }} to="/login" />;
 };
 
-export default PrivateRoute;
+export default PrivetRoute;

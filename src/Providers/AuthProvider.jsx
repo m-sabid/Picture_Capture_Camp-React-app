@@ -1,84 +1,121 @@
-import { createContext, useEffect, useState } from "react";
-import { GoogleAuthProvider, createUserWithEmailAndPassword, getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, signOut, updateProfile } from "firebase/auth";
+import React, { createContext, useEffect, useState } from "react";
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  onAuthStateChanged,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+  signOut,
+  updateProfile,
+  GoogleAuthProvider,
+} from "firebase/auth";
 import { app } from "../firebase/firebase.config";
 import axios from "axios";
+import BASE_URL from "../Components/Shared/baseurl";
 
 export const AuthContext = createContext(null);
 
 const auth = getAuth(app);
+const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [loginRedirectPath, setLoginRedirectPath] = useState(null);
 
-    const googleProvider = new GoogleAuthProvider();
-
-    const createUser = (email, password) => {
-        setLoading(true);
-        return createUserWithEmailAndPassword(auth, email, password)
+  const createUser = async (email, password, displayName, photoUrl) => {
+    setLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await updateProfile(userCredential.user, {
+        displayName,
+        photoURL: photoUrl,
+      });
+      setLoading(false);
+      setUser(userCredential.user);
+    } catch (error) {
+      setLoading(false);
+      throw error;
     }
+  };
 
-    const updateUserProfile = (name, photo) => {
-        return updateProfile(auth.currentUser, {
-            displayName: name, photoURL: photo
-        });
-    }
+  const login = async (email, password, navigate) => {
+    setLoading(true);
+    return signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        setLoading(false);
+        setUser(userCredential.user);
+        if (loginRedirectPath) {
+          navigate(loginRedirectPath);
+          setLoginRedirectPath(null);
+        } else {
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        setLoading(false);
+        throw error;
+      });
+  };
 
-    
-    const signIn = (email, password) => {
-        setLoading(true);
-        return signInWithEmailAndPassword(auth, email, password);
-    }
+  const loginWithGoogle = async () => {
+    setLoading(true);
+    return signInWithPopup(auth, googleProvider);
+  };
 
-    const signInWithGoogle = () =>{
-        setLoading(true);
-        return signInWithPopup(auth, googleProvider);
-    }
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (loggedUser) => {
+      setUser(loggedUser);
 
-    const logOut = () => {
-        setLoading(true);
-        return signOut(auth);
-    }
+      // get and set token
+      if (loggedUser) {
+        axios
+          .post(`${BASE_URL}/jwt`, { email: loggedUser.email })
+          .then((data) => {
+            localStorage.setItem("access-token", data.data.token);
+          });
+      } else {
+        localStorage.removeItem("access-token");
+      }
 
+      setLoading(false);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
-    // useEffect(() => {
-    //     const unsubscribe = onAuthStateChanged(auth, currentUser => {
-    //         setUser(currentUser);
+  const logout = async () => {
+    setLoading(true);
+    return signOut(auth)
+      .then(() => {
+        setLoading(false);
+        setUser(null);
+      })
+      .catch((error) => {
+        setLoading(false);
+        throw error;
+      });
+  };
 
-    //         // get and set token
-    //         if(currentUser){
-    //             axios.post('https://bistro-boss-server-fawn.vercel.app/jwt', {email: currentUser.email})
-    //             .then(data =>{
-    //                 localStorage.setItem('access-token', data.data.token)
-    //                 setLoading(false);
-    //             })
-    //         }
-    //         else{
-    //             localStorage.removeItem('access-token')
-    //         }
+  const authInfo = {
+    user,
+    createUser,
+    login,
+    loginWithGoogle,
+    logout,
+    loading,
+    loginRedirectPath,
+    setLoginRedirectPath,
+  };
 
-            
-    //     });
-    //     return () => {
-    //         return unsubscribe();
-    //     }
-    // }, [])
-
-    const authInfo = {
-        user,
-        loading,
-        createUser,
-        signIn,
-        signInWithGoogle,
-        logOut,
-        updateUserProfile
-    }
-
-    return (
-        <AuthContext.Provider value={authInfo}>
-            {children}
-        </AuthContext.Provider>
-    );
+  return (
+    <AuthContext.Provider value={authInfo}>{children}</AuthContext.Provider>
+  );
 };
 
 export default AuthProvider;

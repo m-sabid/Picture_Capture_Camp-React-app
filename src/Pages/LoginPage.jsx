@@ -7,7 +7,7 @@ import { BsEyeFill, BsEyeSlashFill } from "react-icons/bs";
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { signInWithEmail, signInWithGoogle } = useContext(AuthContext);
+  const { login, loginWithGoogle } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -19,9 +19,8 @@ const LoginPage = () => {
   const onSubmit = async (data) => {
     try {
       const { email, password } = data;
-      await signInWithEmail(email, password);
-      // Redirect user after successful login
-      navigate("/"); 
+      await login(email, password, navigate);
+      navigate("/");
     } catch (error) {
       console.error("Error signing in:", error);
     }
@@ -29,9 +28,9 @@ const LoginPage = () => {
 
   const handleGoogleSignIn = async () => {
     try {
-      await signInWithGoogle();
+      await loginWithGoogle();
       // Redirect user after successful login
-      navigate("/"); 
+      navigate("/");
     } catch (error) {
       console.error("Error signing in with Google:", error);
     }

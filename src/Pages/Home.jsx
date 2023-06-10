@@ -1,7 +1,13 @@
+import HeaderSlider from "../Components/Pages/Home/HeaderSlider";
+import PopularClassesPage from "../Components/Pages/Home/PopularClasses";
+import PopularInstructors from "../Components/Pages/Home/PopularInstructors";
+
 const Home = () => {
   return (
     <div>
-      <h1 className="bg-red-600">Hello World</h1>
+      <HeaderSlider />
+      <PopularClassesPage />
+      <PopularInstructors />
     </div>
   );
 };

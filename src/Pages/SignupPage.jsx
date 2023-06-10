@@ -12,8 +12,7 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  const { createUser, updateUserProfile, signInWithGoogle } =
-    useContext(AuthContext);
+  const { createUser, loginWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const {
@@ -34,8 +33,21 @@ const SignupPage = () => {
     );
   };
 
+  const validatePassword = (value) => {
+    let error = "";
+
+    if (value.length < 6) {
+      error = "Password must be at least 6 characters long";
+    } else if (!/[A-Z]/.test(value)) {
+      error = "Password must contain a capital letter";
+    } else if (!/[!@#$%^&*]/.test(value)) {
+      error = "Password must contain a special character";
+    }
+
+    setPasswordError(error);
+  };
+
   const onSubmit = async (data) => {
-    reset();
     try {
       const {
         name,
@@ -49,21 +61,13 @@ const SignupPage = () => {
       } = data;
 
       // Validate password
-      if (
-        password.length < 6 ||
-        !/[A-Z]/.test(password) ||
-        !/[!@#$%^&*]/.test(password)
-      ) {
-        setPasswordError(
-          "Invalid password. Password must be at least 6 characters long, contain a capital letter, and a special character."
-        );
+      validatePassword(password);
+
+      if (passwordError) {
         return;
-      } else {
-        setPasswordError("");
       }
 
-      await createUser(email, password);
-      await updateUserProfile(name, photoURL);
+      await createUser(email, password, name, photoURL);
 
       const saveUser = { name, email, gender, phoneNumber, address };
 
@@ -77,17 +81,15 @@ const SignupPage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          if (data.insertedId) {
-            reset();
-            Swal.fire({
-              title: "Success!",
-              text: "User created successfully.",
-              icon: "success",
-              confirmButtonText: "OK",
-            }).then(() => {
-              navigate("/");
-            });
-          }
+          reset(); // Reset the form
+          Swal.fire({
+            title: "Success!",
+            text: "User created successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            navigate("/");
+          });
         })
         .catch((error) => {
           console.error("Error sending user data to server:", error);
@@ -97,9 +99,40 @@ const SignupPage = () => {
     }
   };
 
+  // Google Signup
   const handleGoogleSignup = async () => {
     try {
-      await signInWithGoogle();
+      const result = await loginWithGoogle();
+
+      // Access the user's name and email from the Google sign-in result
+      const { displayName, email } = result.user;
+
+      // Save the user's name and email to the server or wherever necessary
+      const saveUser = { name: displayName, email };
+
+      // Send user data to the server
+      fetch(`${BASE_URL}/users`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(saveUser),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          reset(); // Reset the form
+          Swal.fire({
+            title: "Success!",
+            text: "User created successfully.",
+            icon: "success",
+            confirmButtonText: "OK",
+          }).then(() => {
+            navigate("/"); // Redirect to the home page
+          });
+        })
+        .catch((error) => {
+          console.error("Error sending user data to server:", error);
+        });
     } catch (error) {
       console.error("Error signing up with Google:", error);
     }
@@ -123,7 +156,7 @@ const SignupPage = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="grid grid-cols-1 gap-4"
         >
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="name" className="text-gray-800">
               Name
             </label>
@@ -137,7 +170,7 @@ const SignupPage = () => {
               <span className="text-red-500">Name is required</span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="email" className="text-gray-800">
               Email
             </label>
@@ -151,7 +184,7 @@ const SignupPage = () => {
               <span className="text-red-500">Email is required</span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="password" className="text-gray-800">
               Password
             </label>
@@ -161,6 +194,7 @@ const SignupPage = () => {
                 id="password"
                 {...register("password", { required: true })}
                 className="input input-bordered w-full max-w-xs pr-10"
+                onChange={(e) => validatePassword(e.target.value)}
               />
               <button
                 type="button"
@@ -178,7 +212,7 @@ const SignupPage = () => {
               <span className="text-red-500">Password is required</span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="confirmPassword" className="text-gray-800">
               Confirm Password
             </label>
@@ -208,7 +242,7 @@ const SignupPage = () => {
               <span className="text-red-500">Passwords do not match</span>
             )}
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="photoURL" className="text-gray-800">
               Photo URL
             </label>
@@ -219,7 +253,7 @@ const SignupPage = () => {
               className="input input-bordered w-full max-w-xs"
             />
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="gender" className="text-gray-800">
               Gender
             </label>
@@ -234,7 +268,7 @@ const SignupPage = () => {
               <option value="other">Other</option>
             </select>
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="phoneNumber" className="text-gray-800">
               Phone Number
             </label>
@@ -245,7 +279,7 @@ const SignupPage = () => {
               className="input input-bordered w-full max-w-xs"
             />
           </div>
-          <div>
+          <div className="flex flex-col w-full">
             <label htmlFor="address" className="text-gray-800">
               Address
             </label>
@@ -254,6 +288,9 @@ const SignupPage = () => {
               {...register("address")}
               className="form-textarea mt-1 block w-full rounded-md border-gray-300"
             />
+          </div>
+          <div className="flex flex-col w-full">
+            <p className="text-red-500">{passwordError}</p>
           </div>
           <div className="col-span-2">
             <button
