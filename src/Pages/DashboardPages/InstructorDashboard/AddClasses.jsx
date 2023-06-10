@@ -5,8 +5,8 @@ import useInstructor from "../../../hooks/useInstructor";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 const AddClasses = () => {
-  const {  instructorName, instructorEmail } = useInstructor();
-  const { handleSubmit, register } = useForm();
+  const { instructorName, instructorEmail } = useInstructor();
+  const { handleSubmit, register, reset } = useForm();
   const [axiosSecure] = useAxiosSecure();
 
   const onSubmit = async (data) => {
@@ -19,10 +19,11 @@ const AddClasses = () => {
       };
 
       // Make a POST request to the endpoint
-      const response = await axiosSecure.post("/api/manage-classes", requestData);
+      const response = await axiosSecure.post("/api/classes", requestData);
       if (response.data.success) {
         // Instructor data was successfully added
         Swal.fire("Success", "Added A Class Successfully", "success");
+        reset();
       } else {
         // Failed to add the instructor data
         Swal.fire("Error", "Failed to add instructor data", "error");
