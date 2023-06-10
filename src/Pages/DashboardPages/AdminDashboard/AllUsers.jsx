@@ -39,7 +39,7 @@ const AllUsers = () => {
   };
 
   const makeInstructor = (userId, userName) => {
-    updateRole(userId, "instructor" , userName);
+    updateRole(userId, "instructor", userName);
   };
 
   useEffect(() => {
@@ -70,7 +70,7 @@ const AllUsers = () => {
                 <td>{user.role}</td>
                 <td className="flex gap-2 justify-center items-center">
                   {user.role === "admin" ? (
-                    "admin"
+                    <span className="text-green-600">Admin</span>
                   ) : (
                     <button
                       onClick={() => makeAdmin(user._id, user?.name)}
@@ -80,7 +80,9 @@ const AllUsers = () => {
                       <FaUserShield />
                     </button>
                   )}
-                  {user && (
+                  {user.role === "instructor" ? (
+                    <span className="text-green-600">Instructor</span>
+                  ) : (
                     <div className="flex gap-4 justify-center items-center">
                       <button
                         onClick={() => makeInstructor(user._id, user?.name)}
