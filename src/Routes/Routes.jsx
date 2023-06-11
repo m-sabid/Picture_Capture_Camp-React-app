@@ -10,6 +10,7 @@ import AdminHome from "../Pages/DashboardPages/AdminDashboard/AdminHome";
 import AddClasses from "../Pages/DashboardPages/InstructorDashboard/AddClasses";
 import ManageClasses from "../Pages/DashboardPages/AdminDashboard/ManageClasses";
 import AdminRoute from "./AdminRoute";
+import AllClasses from "../Pages/DashboardPages/AdminDashboard/AllClasses";
 
 export const router = createBrowserRouter([
   {
@@ -47,6 +48,14 @@ export const router = createBrowserRouter([
         element: (
           <AdminRoute>
             <AllUsers />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "all-classes",
+        element: (
+          <AdminRoute>
+            <AllClasses />
           </AdminRoute>
         ),
       },
