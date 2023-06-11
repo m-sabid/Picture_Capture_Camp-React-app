@@ -39,7 +39,6 @@ const AllClassesPage = () => {
 
     try {
       const response = await axios.post(`${BASE_URL}/api/classes/cart`, {
-        _id: addedClasses._id,
         title: addedClasses.title,
         seats: addedClasses.seats,
         price: addedClasses.price,
