@@ -11,6 +11,8 @@ import AddClasses from "../Pages/DashboardPages/InstructorDashboard/AddClasses";
 import ManageClasses from "../Pages/DashboardPages/AdminDashboard/ManageClasses";
 import AdminRoute from "./AdminRoute";
 import AllClasses from "../Pages/DashboardPages/AdminDashboard/AllClasses";
+import AllClassesPage from "../Pages/AllClassesPage";
+import MyClassesCart from "../Pages/DashboardPages/MyClassesCart";
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +30,10 @@ export const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
+      },
+      {
+        path: "/classes",
+        element: <AllClassesPage />,
       },
     ],
   },
@@ -59,6 +65,18 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
       },
+      {
+        path: "manage-classes",
+        element: (
+          <AdminRoute>
+            <ManageClasses />
+          </AdminRoute>
+        ),
+      },
+      {
+        path: "instructor-add-class",
+        element: <AddClasses />,
+      },
     ],
   },
   {
@@ -70,12 +88,8 @@ export const router = createBrowserRouter([
     ),
     children: [
       {
-        path: "instructor-add-class",
-        element: <AddClasses />,
-      },
-      {
-        path: "manage-classes",
-        element: <ManageClasses />,
+        path: "my-classes",
+        element: <MyClassesCart />,
       },
     ],
   },

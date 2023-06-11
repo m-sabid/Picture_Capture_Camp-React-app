@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { FaChevronCircleRight } from "react-icons/fa";
 import DashboardHeader from "../../../Components/Shared/DashboardHeader";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const AllClasses = () => {
   const [axiosSecure] = useAxiosSecure();
@@ -10,6 +11,31 @@ const AllClasses = () => {
     const res = await axiosSecure.get(`/api/all-classes`);
     return res.data;
   });
+
+  const handleDelete = async (classId) => {
+    try {
+      const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        cancelButtonText: "Cancel",
+      });
+
+      if (result.isConfirmed) {
+        const res = await axiosSecure.delete(`/api/classes/${classId}`);
+        if (res.data.success) {
+          refetch();
+          Swal.fire("Deleted!", "The class has been deleted.", "success");
+        }
+      }
+    } catch (error) {
+      // Handle error and show error message
+    }
+  };
 
   return (
     <div>
@@ -33,16 +59,16 @@ const AllClasses = () => {
                 <hr />
                 <ul className="my-2 bg-gray-100 p-3 rounded-md">
                   <li className="flex items-center gap-2 ml-2">
-                    <FaChevronCircleRight /> <strong> Price: </strong>$
-                    {res.price}
+                    <FaChevronCircleRight /> <strong> Price: </strong>${res.price}
                   </li>
                   <li className="flex items-center gap-2 ml-2">
-                    <FaChevronCircleRight /> <strong> Seats: </strong>
-                    {res.seats}
+                    <FaChevronCircleRight /> <strong> Seats: </strong>{res.seats}
                   </li>
                 </ul>
                 <hr />
-                <button className="btn bg-red-400 text-secondary" >Delete Class</button>
+                <button className="btn bg-red-400 text-secondary" onClick={() => handleDelete(res._id)}>
+                  Delete Class
+                </button>
               </div>
             </div>
           </div>
