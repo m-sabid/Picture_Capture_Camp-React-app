@@ -80,9 +80,7 @@ const AllClassesPage = () => {
         {classes.map((res) => (
           <div key={res._id} className="">
             <div
-              className={`card card-compact bg-${
-                res.seats === 0 ? "red" : "base-100"
-              } shadow-xl`}
+              className={`card card-compact ${res.seats === 0 ? "bg-red-500" : "bg-base-100"} shadow-xl`}
             >
               <figure>
                 <img
