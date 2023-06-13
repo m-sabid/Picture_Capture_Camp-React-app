@@ -1,54 +1,56 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import BASE_URL from "../../Shared/baseurl";
-import { useQuery } from "@tanstack/react-query";
+import { FaEnvelopeOpenText } from "react-icons/fa";
 
 const PopularInstructors = () => {
-  const {
-    data: popularInstructors,
-    isLoading,
-    isError,
-  } = useQuery("popularInstructors", fetchPopularInstructors);
+  const [instructors, setInstructors] = useState([]);
+
+  useEffect(() => {
+    fetchPopularInstructors();
+  }, []);
 
   async function fetchPopularInstructors() {
     try {
-      const response = await axios.get(`${BASE_URL}/api/instructors/popular`);
-      return response.data;
+      const response = await axios.get(`${BASE_URL}/api/popular-instructors`);
+      setInstructors(response.data);
     } catch (error) {
-      throw new Error("Error fetching popular instructors");
+      console.error("Error fetching popular instructors", error);
     }
   }
 
-  if (isLoading) {
-    return <progress className="progress w-56"></progress>;
-  }
-
-  if (isError) {
-    return <p>Error fetching popular instructors</p>;
-  }
-
   return (
-    <div className="container mx-auto grid grid-cols-2 md:grid-cols-3 gap-6">
+    <div className="container mx-auto my-20 ">
       <h2 className="text-2xl font-bold mb-6">Popular instructors</h2>
-      {popularInstructors?.slice(0, 6).map((instructor) => (
-        <div
-          key={instructor._id}
-          className="rounded-lg shadow-md overflow-hidden"
-        >
-          <img
-            src={instructor.image}
-            alt={instructor.name}
-            className="w-full h-40 object-cover"
-          />
-          <div className="p-4">
-            <h3 className="text-xl font-semibold mb-2">{instructor.name}</h3>
-            <p className="text-gray-600">
-              Classes: {instructor.classes.length}
-            </p>
-            {/* Add any additional relevant information */}
+      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+        {instructors.map((instructor) => (
+          <div
+            key={instructor._id}
+            className="bg-white rounded-lg shadow-md overflow-hidden"
+          >
+            <img
+              src={
+                instructor.photoURL
+                  ? instructor.photoURL
+                  : "https://img.freepik.com/free-icon/user_318-159711.jpg"
+              }
+              alt={instructor.name}
+              className="h-40 mx-auto text-center"
+            />
+            <div className="p-4">
+              <h3 className="text-xl font-semibold mb-2">{instructor.name}</h3>
+              <p className="flex items-center text-gray-600">
+                <FaEnvelopeOpenText className="mr-1" />
+                <span className="text-blue-400 font-bold mx-2">
+                  {instructor.email}
+                </span>
+              </p>
+              <h4 className="bg-gray-100 my-2 p-2 rounded-md font-semibold">Total Classes: {instructor.totalClasses}</h4>
+              <h4 className="bg-gray-100 my-2 p-2 rounded-md font-semibold">Total Classes: {instructor.totalStudents}</h4>
+            </div>
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 };

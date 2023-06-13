@@ -6,6 +6,7 @@ import BASE_URL from "../../Components/Shared/baseurl";
 import { useQuery } from "@tanstack/react-query";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { Link } from "react-router-dom";
 
 const MyClassesCart = () => {
   const { user } = useContext(AuthContext);
@@ -93,9 +94,11 @@ const MyClassesCart = () => {
                   </button>
                 </td>
                 <td>
-                  <button className="btn bg-blue-300 hover:bg-blue-500 hover:text-white">
-                    Pay
-                  </button>
+                  <Link to="/dashboard/payment" state={classItem}>
+                    <button className="btn bg-blue-300 hover:bg-blue-500 hover:text-white">
+                      Pay
+                    </button>
+                  </Link>
                 </td>
               </tr>
             ))}

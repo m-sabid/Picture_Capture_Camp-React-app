@@ -1,31 +1,22 @@
-import React from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { FiUsers } from "react-icons/fi";
 import BASE_URL from "../../Shared/baseurl";
-import { useQuery } from "@tanstack/react-query";
 
 const PopularClassesPage = () => {
-  const {
-    data: popularClasses,
-    isLoading,
-    isError,
-  } = useQuery("popularClasses", fetchPopularClasses);
+  const [popularClasses, setPopularClasses] = useState([]);
+
+  useEffect(() => {
+    fetchPopularClasses();
+  }, []);
 
   async function fetchPopularClasses() {
     try {
-      const response = await axios.get(`${BASE_URL}/api/classes/popular`);
-      return response.data;
+      const response = await axios.get(`${BASE_URL}/api/popular-classes`);
+      setPopularClasses(response.data);
     } catch (error) {
-      throw new Error("Error fetching popular classes");
+      console.error("Error fetching popular popularClasses", error);
     }
-  }
-
-  if (isLoading) {
-    return <progress className="progress w-56"></progress>;
-  }
-
-  if (isError) {
-    return <p>Error fetching popular classes</p>;
   }
 
   return (

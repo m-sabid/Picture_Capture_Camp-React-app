@@ -69,7 +69,7 @@ const SignupPage = () => {
 
       await createUser(email, password, name, photoURL);
 
-      const saveUser = { name, email, gender, phoneNumber, address };
+      const saveUser = { name, email, gender, phoneNumber, address, photoURL };
 
       // Send user data to the server
       fetch(`${BASE_URL}/users`, {
@@ -105,10 +105,10 @@ const SignupPage = () => {
       const result = await googleSignIn();
 
       // Access the user's name and email from the Google sign-in result
-      const { displayName, email } = result.user;
+      const { displayName, email, photoURL } = result.user;
 
       // Save the user's name and email to the server or wherever necessary
-      const saveUser = { name: displayName, email };
+      const saveUser = { name: displayName, email, photoURL };
 
       // Send user data to the server
       fetch(`${BASE_URL}/users`, {

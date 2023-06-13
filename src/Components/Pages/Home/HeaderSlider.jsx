@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
-import "swiper/css/navigation";
 import { Autoplay, Navigation, Pagination } from "swiper";
 import LazyLoad from "react-lazy-load";
 

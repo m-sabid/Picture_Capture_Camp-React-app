@@ -13,6 +13,12 @@ import AdminRoute from "./AdminRoute";
 import AllClasses from "../Pages/DashboardPages/AdminDashboard/AllClasses";
 import AllClassesPage from "../Pages/AllClassesPage";
 import MyClassesCart from "../Pages/DashboardPages/MyClassesCart";
+import Payment from "../Pages/DashboardPages/Payment";
+import EnrolledClasses from "../Pages/DashboardPages/EnrolledClasses";
+import PaymentHistory from "../Pages/DashboardPages/PaymentHistory";
+import InstructorClasses from "../Pages/DashboardPages/InstructorDashboard/InstructorClasses";
+import InstructorFeedback from "../Pages/DashboardPages/InstructorDashboard/InstructorFeedback";
+import InstructorsPage from "../Pages/InstructorsPage";
 
 export const router = createBrowserRouter([
   {
@@ -34,6 +40,10 @@ export const router = createBrowserRouter([
       {
         path: "/classes",
         element: <AllClassesPage />,
+      },
+      {
+        path: "/instructors",
+        element: <InstructorsPage />,
       },
     ],
   },
@@ -77,6 +87,14 @@ export const router = createBrowserRouter([
         path: "instructor-add-class",
         element: <AddClasses />,
       },
+      {
+        path: "instructor-my-class",
+        element: <InstructorClasses />,
+      },
+      {
+        path: "instructor-feedback",
+        element: <InstructorFeedback />,
+      },
     ],
   },
   {
@@ -90,6 +108,18 @@ export const router = createBrowserRouter([
       {
         path: "my-classes",
         element: <MyClassesCart />,
+      },
+      {
+        path: "payment",
+        element: <Payment />,
+      },
+      {
+        path: "enrolled-classes",
+        element: <EnrolledClasses />,
+      },
+      {
+        path: "payment-history",
+        element: <PaymentHistory />,
       },
     ],
   },

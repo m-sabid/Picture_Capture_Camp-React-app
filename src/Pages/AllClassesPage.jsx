@@ -44,6 +44,8 @@ const AllClassesPage = () => {
         price: addedClasses.price,
         image: addedClasses.image,
         instructorName: addedClasses.instructorName,
+        instructorEmail: addedClasses.instructorEmail,
+        students: addedClasses.students,
         userName: user.displayName,
         email: user.email,
       });
