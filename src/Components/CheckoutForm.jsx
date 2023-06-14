@@ -69,6 +69,7 @@ const CheckoutForm = ({ price, cart }) => {
         transactionId: paymentIntent.id,
         price,
         id: cart._id,
+        classId: cart.id,
         date: new Date(),
         status: "Paid",
         itemNames: cart.title,
