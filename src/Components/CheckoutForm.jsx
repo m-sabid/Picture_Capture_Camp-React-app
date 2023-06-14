@@ -6,8 +6,6 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({ price, cart }) => {
-  console.log(cart);
-
   const navigate = useNavigate();
 
   const stripe = useStripe();
@@ -21,7 +19,6 @@ const CheckoutForm = ({ price, cart }) => {
   useEffect(() => {
     if (price > 0) {
       axiosSecure.post("/create-payment-intent", { price }).then((res) => {
-        console.log(res.data.clientSecret);
         setClientSecret(res.data.clientSecret);
       });
     }
@@ -53,7 +50,6 @@ const CheckoutForm = ({ price, cart }) => {
       });
 
     if (confirmError) {
-      console.log(confirmError);
       Swal.fire("Error", "Payment confirmation failed.", "error");
     } else if (paymentIntent.status === "succeeded") {
       Swal.fire(
