@@ -26,4 +26,4 @@ Welcome to Picture Capture Camp, a photography-related summer camp school websit
 
 ## Live Site
 
-Visit the live website at [https://www.picturecapturecamp.com](https://www.picturecapturecamp.com).
+Visit the live website at [https://picture-capture-camp.web.app](https://picture-capture-camp.web.app).
