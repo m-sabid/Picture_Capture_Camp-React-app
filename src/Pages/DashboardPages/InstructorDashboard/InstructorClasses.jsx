@@ -14,7 +14,6 @@ const InstructorClasses = () => {
 
   const { data: classes = [], refetch } = useQuery(["classes"], async () => {
     const response = await axiosSecure.get(`/api/all-classes`);
-    console.log(response.data);
     const approvedClasses = response.data.filter(
       (email) => email.instructorEmail === user.email
     );
