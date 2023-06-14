@@ -23,7 +23,7 @@ const PopularInstructors = () => {
   return (
     <div className="container mx-auto my-20 ">
       <h2 className="text-2xl font-bold mb-6">Popular instructors</h2>
-      <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {instructors.map((instructor) => (
           <Fade>
             <div
