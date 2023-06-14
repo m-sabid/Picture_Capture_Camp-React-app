@@ -206,7 +206,7 @@ const TopNav = () => {
           <li>
             <label className="swap swap-rotate">
               {/* this hidden checkbox controls the state */}
-              <input type="checkbox" onChange={handelToggle}/>
+              <input type="checkbox" onChange={handelToggle} />
 
               {/* sun icon */}
               <svg
