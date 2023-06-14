@@ -13,7 +13,6 @@ const InstructorFeedback = () => {
 
   const { data: classes = [], refetch } = useQuery(["classes"], async () => {
     const response = await axiosSecure.get(`/api/all-classes`);
-    console.log(response.data);
     setClassFeedback(
       response.data.filter(
         (email) =>
