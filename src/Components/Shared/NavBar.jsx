@@ -22,8 +22,6 @@ const TopNav = () => {
       setTheme("light");
     }
   };
-
-  console.log(user, "user");
   const navigate = useNavigate();
 
   const handleLogout = () => {
