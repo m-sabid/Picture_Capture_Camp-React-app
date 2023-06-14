@@ -33,7 +33,7 @@ const AllClasses = () => {
         }
       }
     } catch (error) {
-      // Handle error and show error message
+      console.warn(error)
     }
   };
 

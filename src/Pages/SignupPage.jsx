@@ -60,7 +60,6 @@ const SignupPage = () => {
         address,
       } = data;
 
-      // Validate password
       validatePassword(password);
 
       if (passwordError) {
@@ -81,7 +80,7 @@ const SignupPage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          reset(); // Reset the form
+          reset(); 
           Swal.fire({
             title: "Success!",
             text: "User created successfully.",
@@ -120,14 +119,14 @@ const SignupPage = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          reset(); // Reset the form
+          reset(); 
           Swal.fire({
             title: "Success!",
             text: "User created successfully.",
             icon: "success",
             confirmButtonText: "OK",
           }).then(() => {
-            navigate("/"); // Redirect to the home page
+            navigate("/"); 
           });
         })
         .catch((error) => {

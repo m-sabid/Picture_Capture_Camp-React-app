@@ -29,7 +29,6 @@ const HeaderSlider = () => {
         pagination={{
           clickable: true,
         }}
-        // navigation={true}
         modules={[Autoplay, Pagination, Navigation]}
         className="w-full h-[90vh] z-10"
       >

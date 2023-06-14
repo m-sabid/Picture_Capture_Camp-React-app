@@ -29,7 +29,7 @@ const LoginPage = () => {
   const handleGoogleSignIn = async () => {
     try {
       await googleSignIn();
-      // Redirect user after successful login
+      // Redirect 
       navigate("/");
     } catch (error) {
       console.error("Error signing in with Google:", error);

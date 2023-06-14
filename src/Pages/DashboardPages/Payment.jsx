@@ -10,8 +10,6 @@ const Payment = () => {
   const price = location.state.price;
   const cart = location.state;
 
-  //   const price = parseFloat(amount.toFixed(2));
-
   return (
     <div>
       <DashboardHeader title={"Payment"} subtitle={"Payment page"} />

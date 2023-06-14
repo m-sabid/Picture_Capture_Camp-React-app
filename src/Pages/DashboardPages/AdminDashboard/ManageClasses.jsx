@@ -8,7 +8,7 @@ import BASE_URL from "../../../Components/Shared/baseurl";
 
 const ManageClasses = () => {
   const [axiosSecure] = useAxiosSecure();
-  const [feedback, setFeedback] = useState(""); // State to manage feedback in the modal
+  const [feedback, setFeedback] = useState("");
 
   const { data: classes = [], refetch } = useQuery(["classes"], async () => {
     const res = await axiosSecure.get(`/api/classes`);
