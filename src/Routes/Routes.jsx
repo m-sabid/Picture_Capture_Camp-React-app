@@ -19,6 +19,7 @@ import PaymentHistory from "../Pages/DashboardPages/PaymentHistory";
 import InstructorClasses from "../Pages/DashboardPages/InstructorDashboard/InstructorClasses";
 import InstructorFeedback from "../Pages/DashboardPages/InstructorDashboard/InstructorFeedback";
 import InstructorsPage from "../Pages/InstructorsPage";
+import ErrorPage from "../Pages/ErrorPage";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,10 @@ export const router = createBrowserRouter([
         element: <InstructorsPage />,
       },
     ],
+  },
+  {
+    path: "*", 
+    element: <ErrorPage />, 
   },
   {
     path: "/dashboard",
