@@ -1,3 +1,3 @@
-const BASE_URL = 'http://localhost:5000';
+const BASE_URL = "https://picture-capture-camp-server-m-sabid.vercel.app";
 
 export default BASE_URL;
